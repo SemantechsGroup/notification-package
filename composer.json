@@ -1,6 +1,7 @@
 {
     "name": "semantechs/notification",
     "description": "Notification agent to handle all kind of notification with pusher",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Semantechs\\Notification\\": "src/"
