@@ -1,0 +1,18 @@
+{
+    "name": "semantechs/notification",
+    "description": "Notification agent to handle all kind of notification with pusher",
+    "autoload": {
+        "psr-4": {
+            "Semantechs\\Notification\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "M. Taha Ahmad",
+            "email": "tahaahmad929@gmail.com"
+        }
+    ],
+    "require": {
+        "pusher/pusher-php-server": "^7.2"
+    }
+}
