@@ -27,7 +27,7 @@ open app.php in config folder and add following line
     ])->toArray(),
 
 
-add your pusher api key
+add your pusher credentials in .env file
 
 
 PUSHER_APP_ID=
@@ -49,8 +49,6 @@ run following commands
 
 
 composer dump-autload
-
-php artisan vendor:publish --tag=notification-migrations
 
 php artisan migrate
 

@@ -10,14 +10,24 @@ use Sementechs\Notification\Models\Notification;
 
 class NotificationController extends Controller
 {
+    public function index()
+    {
+        try {
+            $notifications = Notification::all();
+            return response($notifications);
+        } catch (Exception $ex) {
+            return response($ex->getMessage(), 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
             $data = $request->all();
-            foreach ($data['user_ids'] as $receiverId) {
-                event(new NotificationEvent($data['user_id'], $receiverId, $data['body']));
+            foreach ($data['receiver_ids'] as $receiverId) {
+                event(new NotificationEvent($data['sender_id'], $receiverId, $data['type'], $data['body']));
             }
-            $data['user_ids'] = json_encode($data['user_ids']);
+            $data['receiver_ids'] = json_encode($data['receiver_ids']);
             $data['body'] = json_encode($data['body']);
             Notification::create($data);
             return response('success');

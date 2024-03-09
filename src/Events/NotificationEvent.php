@@ -12,15 +12,17 @@ class NotificationEvent
 
     public $senderId;
     public $receiverId;
+    public $type;
     public $body;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($senderId, $receiverId, $body)
+    public function __construct($senderId, $receiverId, $type, $body)
     {
         $this->senderId = $senderId;
         $this->receiverId = $receiverId;
+        $this->type = $type;
         $this->body = $body;
     }
 
