@@ -53,7 +53,7 @@ Run following commands
 
 composer dump-autload
 
-php arisan vendor:publish --tag=notification-migrations
+php artisan vendor:publish --tag=notification-migrations
 
 php artisan migrate
 
