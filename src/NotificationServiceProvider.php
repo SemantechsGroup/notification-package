@@ -13,7 +13,7 @@ class NotificationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // 
+        $this->app->make('Sementechs\Notification\Controllers\NotificationController');
     }
 
     /**
@@ -23,7 +23,8 @@ class NotificationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->publishes([
+            __DIR__ . '/database/migrations/' => database_path('migrations'),
+        ], 'notification-migrations');
     }
 }

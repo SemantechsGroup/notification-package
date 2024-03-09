@@ -1,4 +1,4 @@
-open composer.json and add following line
+Open composer.json and add following line
 
 "autoload": {
 
@@ -15,7 +15,7 @@ open composer.json and add following line
     },
     
 
-open app.php in config folder and add following line
+Open app.php in config folder and add following line
 
 
 'providers' => ServiceProvider::defaultProviders()->merge([
@@ -26,8 +26,12 @@ open app.php in config folder and add following line
     
     ])->toArray(),
 
+Define your route
 
-add your pusher credentials in .env file
+Route::apiResource('/notifications', \Sementechs\Notification\Controllers\NotificationController::class);
+
+
+Add your pusher credentials in .env file
 
 
 PUSHER_APP_ID=
@@ -45,10 +49,11 @@ PUSHER_SCHEME=https
 PUSHER_APP_CLUSTER=mt1
 
 
-run following commands
-
+Run following commands
 
 composer dump-autload
+
+php arisan vendor:publish --tag=notification-migrations
 
 php artisan migrate
 
