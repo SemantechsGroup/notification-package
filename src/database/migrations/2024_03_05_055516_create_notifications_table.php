@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->text('user_ids');
+            $table->integer('sender_id');
+            $table->text('receiver_ids');
             $table->enum('type', ['web', 'in-app', 'push']);
             $table->text('body');
             $table->timestamps();
