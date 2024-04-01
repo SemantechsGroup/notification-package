@@ -33,6 +33,7 @@ Route::apiResource('/notifications', \Sementechs\Notification\Controllers\Notifi
 
 Add your pusher credentials in .env file
 
+BROADCAST_DRIVER=puhser
 
 PUSHER_APP_ID=
 
@@ -51,7 +52,7 @@ PUSHER_APP_CLUSTER=mt1
 
 Run following commands
 
-composer dump-autload
+composer dump-autoload
 
 php artisan vendor:publish --tag=notification-migrations
 
