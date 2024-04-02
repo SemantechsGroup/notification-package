@@ -13,10 +13,10 @@ class NotificationController extends Controller
     public function index($type, $userId)
     {
         try {
-            $notifications = Notification::where('type', $type)->latest();
+            $notifications = Notification::where('type', $type)->latest()->get();
             $newNotifications = [];
             foreach ($notifications as $notification) {
-                if (is_array($userId, json_decode($notification['receiver_ids']))) {
+                if (in_array($userId, json_decode($notification['receiver_ids']))) {
                     $newNotifications[] = $notification;
                 }
             }
