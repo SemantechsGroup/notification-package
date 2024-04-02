@@ -15,12 +15,18 @@ class NotificationController extends Controller
         try {
             $notifications = Notification::where('type', $type)->latest()->get();
             $newNotifications = [];
+            $notificationCount = 0;
             foreach ($notifications as $notification) {
                 if (in_array($userId, json_decode($notification['receiver_ids']))) {
                     $newNotifications[] = $notification;
+                    $notificationCount += 1;
                 }
             }
-            return response($newNotifications);
+            $data = [
+                'notifications' => $newNotifications,
+                'count' => $notificationCount
+            ];
+            return response($data);
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
@@ -36,6 +42,20 @@ class NotificationController extends Controller
             $data['receiver_ids'] = json_encode($data['receiver_ids']);
             $data['body'] = json_encode($data['body']);
             Notification::create($data);
+            return response('success');
+        } catch (Exception $ex) {
+            return response($ex->getMessage(), 500);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $data = $request->all();
+            foreach ($data as $notification) {
+                $not = Notification::find($notification['id']);
+                $not->fill(['is_read' => 1])->save();
+            }
             return response('success');
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
