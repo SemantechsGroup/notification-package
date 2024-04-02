@@ -19,7 +19,9 @@ class NotificationController extends Controller
             foreach ($notifications as $notification) {
                 if (in_array($userId, json_decode($notification['receiver_ids']))) {
                     $newNotifications[] = $notification;
-                    $notificationCount += 1;
+                    if ($notification['is_read'] == 0) {
+                        $notificationCount += 1;
+                    }
                 }
             }
             $data = [
