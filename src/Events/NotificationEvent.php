@@ -15,6 +15,7 @@ class NotificationEvent implements ShouldBroadcast
     public $receiverId;
     public $type;
     public $body;
+    public $isRead;
 
     /**
      * Create a new event instance.
@@ -25,6 +26,7 @@ class NotificationEvent implements ShouldBroadcast
         $this->receiverId = $receiverId;
         $this->type = $type;
         $this->body = $body;
+        $this->isRead = 0;
     }
 
     /**
