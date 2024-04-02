@@ -10,11 +10,17 @@ use Sementechs\Notification\Models\Notification;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index($type, $userId)
     {
         try {
-            $notifications = Notification::all();
-            return response($notifications);
+            $notifications = Notification::where('type', $type)->latest();
+            $newNotifications = [];
+            foreach ($notifications as $notification) {
+                if (is_array($userId, json_decode($notification['receiver_ids']))) {
+                    $newNotifications[] = $notification;
+                }
+            }
+            return response($newNotifications);
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
