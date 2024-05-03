@@ -47,23 +47,24 @@ class NotificationController extends Controller
                 self::sendMobileNotification($data);
             }
 
+            $data['receiver_ids'] = json_encode($data['receiver_ids']);
+            $data['body'] = json_encode($data['body']);
             Notification::create($data);
-            return 'success';
+
+            return 'done';
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
     }
 
-    private function sendWebNotification($data)
+    private static function sendWebNotification($data)
     {
         foreach ($data['receiver_ids'] as $receiverId) {
-            event(new NotificationEvent($data['sender_id'], $receiverId, $data['channel'], $data['body'], $data['type']));
+            event(new NotificationEvent($data['sender_id'], $receiverId, $data['channel'], $data['type'], $data['body']));
         }
-        $data['receiver_ids'] = json_encode($data['receiver_ids']);
-        $data['body'] = json_encode($data['body']);
     }
 
-    private function sendMobileNotification($data)
+    private static function sendMobileNotification($data)
     {
         $conditions = "";
         $index = 1;
