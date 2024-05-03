@@ -11,10 +11,10 @@ use SmirlTech\LaravelFcm\Facades\LaravelFcm;
 
 class NotificationController extends Controller
 {
-    public static function getAllNotifications($type, $userId)
+    public static function getAllNotifications($channel, $type, $userId)
     {
         try {
-            $notifications = Notification::where('channel', $type)->latest()->get();
+            $notifications = Notification::where('channel', $channel)->where('type', $type)->latest()->get();
             $newNotifications = [];
             $notificationCount = 0;
             foreach ($notifications as $notification) {
