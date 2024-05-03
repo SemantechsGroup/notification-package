@@ -56,5 +56,7 @@ composer dump-autoload
 
 php artisan vendor:publish --tag=notification-migrations
 
+php artisan vendor:publish --tag=notification-config
+
 php artisan migrate
 
