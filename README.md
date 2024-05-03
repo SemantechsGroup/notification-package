@@ -28,8 +28,6 @@ Open app.php in config folder and add following line
 
 Define your route
 
-Route::apiResource('/notifications', \Sementechs\Notification\Controllers\NotificationController::class);
-
 
 Add your pusher credentials in .env file
 
@@ -60,3 +58,34 @@ php artisan vendor:publish --tag=notification-config
 
 php artisan migrate
 
+Available Methods
+
+1. Send Notification
+
+$notificationObject = [
+                'sender_id' => 1,
+                'receiver_ids' => [
+                    1, 2, 3
+                ],
+                'channel' => 'web', // web, mobile
+                'body' => [
+                    'title' => 'Title',
+                    'body' => 'Detail'
+                ],
+                'type' => 'admin' // admin, user
+            ];
+
+
+NotificationController::sendNotification($notificationObject);
+
+2. Get All Notification
+
+$type = web/user
+
+NotificationController::getAllNotifications($type, $userId)
+
+3. Read All Notifications
+
+$data = objects of all notifications
+
+NotificationController::readAll($data)

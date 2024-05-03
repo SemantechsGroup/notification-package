@@ -14,7 +14,7 @@ class NotificationController extends Controller
     public function getAllNotifications($type, $userId)
     {
         try {
-            $notifications = Notification::where('type', $type)->latest()->get();
+            $notifications = Notification::where('channel', $type)->latest()->get();
             $newNotifications = [];
             $notificationCount = 0;
             foreach ($notifications as $notification) {
@@ -87,10 +87,9 @@ class NotificationController extends Controller
         ])->send();
     }
 
-    public function update(Request $request)
+    public function readAll($data)
     {
         try {
-            $data = $request->all();
             foreach ($data as $notification) {
                 $not = Notification::find($notification['id']);
                 $not->fill(['is_read' => 1])->save();
