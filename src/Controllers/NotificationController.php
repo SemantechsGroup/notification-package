@@ -11,7 +11,7 @@ use SmirlTech\LaravelFcm\Facades\LaravelFcm;
 
 class NotificationController extends Controller
 {
-    public function getAllNotifications($type, $userId)
+    public static function getAllNotifications($type, $userId)
     {
         try {
             $notifications = Notification::where('channel', $type)->latest()->get();
@@ -87,7 +87,7 @@ class NotificationController extends Controller
         ])->send();
     }
 
-    public function readAll($data)
+    public static function readAll($data)
     {
         try {
             foreach ($data as $notification) {
