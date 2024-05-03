@@ -16,17 +16,19 @@ class NotificationEvent implements ShouldBroadcast
     public $type;
     public $body;
     public $isRead;
+    public $channel;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($senderId, $receiverId, $type, $body)
+    public function __construct($senderId, $receiverId, $channel, $type, $body)
     {
         $this->senderId = $senderId;
         $this->receiverId = $receiverId;
         $this->type = $type;
         $this->body = $body;
         $this->isRead = 0;
+        $this->channel = $channel;
     }
 
     /**
@@ -36,11 +38,11 @@ class NotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        return [env('APP_NAME') . '.' . $this->receiverId];
+        return [$this->type . '.' . $this->receiverId];
     }
 
     public function broadcastAs()
     {
-        return env('APP_NAME') . '.' . $this->receiverId;
+        return $this->type . '.' . $this->receiverId;
     }
 }

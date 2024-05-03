@@ -26,5 +26,8 @@ class NotificationServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/database/migrations/' => database_path('migrations'),
         ], 'notification-migrations');
+        $this->publishes([
+            __DIR__ . '/config/laravel-fcm.php' => config_path('laravel-fcm.php'),
+        ], 'notification-config');
     }
 }

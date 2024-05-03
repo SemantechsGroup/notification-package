@@ -7,10 +7,11 @@ use Exception;
 use Illuminate\Http\Request;
 use Sementechs\Notification\Events\NotificationEvent;
 use Sementechs\Notification\Models\Notification;
+use SmirlTech\LaravelFcm\Facades\LaravelFcm;
 
 class NotificationController extends Controller
 {
-    public function index($type, $userId)
+    public function getAllNotifications($type, $userId)
     {
         try {
             $notifications = Notification::where('type', $type)->latest()->get();
@@ -34,20 +35,55 @@ class NotificationController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public static function sendNotification($data)
     {
         try {
-            $data = $request->all();
-            foreach ($data['receiver_ids'] as $receiverId) {
-                event(new NotificationEvent($data['sender_id'], $receiverId, $data['type'], $data['body']));
+            if ($data['type'] == 'web') {
+                self::sendWebNotification($data);
+            } else if ($data['type'] == 'mobile') {
+                self::sendMobileNotification($data);
+            } else if (empty($data['type'])) {
+                self::sendWebNotification($data);
+                self::sendMobileNotification($data);
             }
-            $data['receiver_ids'] = json_encode($data['receiver_ids']);
-            $data['body'] = json_encode($data['body']);
+
             Notification::create($data);
-            return response('success');
+            return 'success';
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
+    }
+
+    private function sendWebNotification($data)
+    {
+        foreach ($data['receiver_ids'] as $receiverId) {
+            event(new NotificationEvent($data['sender_id'], $receiverId, $data['channel'], $data['body'], $data['type']));
+        }
+        $data['receiver_ids'] = json_encode($data['receiver_ids']);
+        $data['body'] = json_encode($data['body']);
+    }
+
+    private function sendMobileNotification($data)
+    {
+        $conditions = "";
+        $index = 1;
+        $length = count($data['receiver_ids']);
+
+        foreach ($data['receiver_ids'] as $receiverId) {
+            $conditions += "user." . $receiverId . " in topics";
+            if ($length > 1 && $index == $length - 1) {
+                $conditions += " || ";
+            }
+            $index++;
+        }
+
+        LaravelFcm::fromRaw([
+            "condition" => $conditions,
+            "notification" => [
+                "title" => $data['body']['title'],
+                "body" => $data['body']['detail']
+            ],
+        ])->send();
     }
 
     public function update(Request $request)
