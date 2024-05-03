@@ -38,11 +38,11 @@ class NotificationController extends Controller
     public static function sendNotification($data)
     {
         try {
-            if ($data['type'] == 'web') {
+            if ($data['channel'] == 'web') {
                 self::sendWebNotification($data);
-            } else if ($data['type'] == 'mobile') {
+            } else if ($data['channel'] == 'mobile') {
                 self::sendMobileNotification($data);
-            } else if (empty($data['type'])) {
+            } else if (empty($data['channel'])) {
                 self::sendWebNotification($data);
                 self::sendMobileNotification($data);
             }
