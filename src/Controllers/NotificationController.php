@@ -29,7 +29,7 @@ class NotificationController extends Controller
                 'notifications' => $newNotifications,
                 'count' => $notificationCount
             ];
-            return response($data);
+            return $data;
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
@@ -94,7 +94,7 @@ class NotificationController extends Controller
                 $not = Notification::find($notification['id']);
                 $not->fill(['is_read' => 1])->save();
             }
-            return response('success');
+            return 'success';
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
         }
