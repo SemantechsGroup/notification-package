@@ -11,6 +11,16 @@ use SmirlTech\LaravelFcm\Facades\LaravelFcm;
 
 class NotificationController extends Controller
 {
+    public static function allNotifications()
+    {
+        try {
+            $notifications = Notification::latest()->get();
+            return $notifications;
+        } catch (Exception $ex) {
+            return response($ex->getMessage(), 500);
+        }
+    }
+
     public static function getAllNotifications($channel, $type, $userId)
     {
         try {

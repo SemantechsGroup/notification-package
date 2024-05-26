@@ -26,9 +26,6 @@ Open app.php in config folder and add following line
     
     ])->toArray(),
 
-Define your route
-
-
 Add your pusher credentials in .env file
 
 BROADCAST_DRIVER=puhser
