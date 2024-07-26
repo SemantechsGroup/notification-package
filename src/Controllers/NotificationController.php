@@ -81,9 +81,9 @@ class NotificationController extends Controller
         $length = count($data['receiver_ids']);
 
         foreach ($data['receiver_ids'] as $receiverId) {
-            $conditions += "user." . $receiverId . " in topics";
+            $conditions .= "user." . $receiverId . " in topics";
             if ($length > 1 && $index == $length - 1) {
-                $conditions += " || ";
+                $conditions .= " || ";
             }
             $index++;
         }
