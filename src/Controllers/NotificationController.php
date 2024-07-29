@@ -51,8 +51,6 @@ class NotificationController extends Controller
             if ($data['channel'] == 'web') {
                 self::sendWebNotification($data);
             } else if ($data['channel'] == 'mobile') {
-                self::sendMobileNotification($data);
-            } else if (empty($data['channel'])) {
                 self::sendWebNotification($data);
                 self::sendMobileNotification($data);
             }
@@ -76,25 +74,10 @@ class NotificationController extends Controller
 
     private static function sendMobileNotification($data)
     {
-        $conditions = "";
-        $index = 1;
-        $length = count($data['receiver_ids']);
-
-        foreach ($data['receiver_ids'] as $receiverId) {
-            $conditions .= "user." . $receiverId . " in topics";
-            if ($length > 1 && $index == $length - 1) {
-                $conditions .= " || ";
-            }
-            $index++;
-        }
-
-        LaravelFcm::fromRaw([
-            "condition" => $conditions,
-            "notification" => [
-                "title" => $data['body']['title'],
-                "body" => $data['body']['detail']
-            ],
-        ])->send();
+        LaravelFcm::fromArray([
+            "title" => $data['body']['title'],
+            "body" => $data['body']['detail']
+        ])->sendNotification($data['receiver_ids']);
     }
 
     public static function readAll($data)
