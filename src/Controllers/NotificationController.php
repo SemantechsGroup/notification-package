@@ -77,7 +77,7 @@ class NotificationController extends Controller
         LaravelFcm::fromArray([
             "title" => $data['body']['title'],
             "body" => $data['body']['detail']
-        ])->sendNotification($data['receiver_ids']);
+        ])->sendNotification($data['device_tokens']);
     }
 
     public static function readAll($data)
