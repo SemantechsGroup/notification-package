@@ -4,10 +4,11 @@ namespace Sementechs\Notification\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\Request;
 use Sementechs\Notification\Events\NotificationEvent;
 use Sementechs\Notification\Models\Notification;
-use SmirlTech\LaravelFcm\Facades\LaravelFcm;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification as FcmNotification;
 
 class NotificationController extends Controller
 {
@@ -74,10 +75,23 @@ class NotificationController extends Controller
 
     private static function sendMobileNotification($data)
     {
-        LaravelFcm::fromArray([
-            "title" => $data['body']['title'],
-            "body" => $data['body']['detail']
-        ])->sendNotification($data['device_tokens']);
+        $firebase = (new Factory)->withServiceAccount(storage_path(env('FIREBASE_CREDENTIALS')));
+
+        $messaging = $firebase->createMessaging();
+
+        $notification = FcmNotification::create($data['body']['title'], $data['body']['detail']);
+
+        $messages = array_map(function ($token) use ($notification) {
+            return CloudMessage::withTarget('token', $token)
+                ->withNotification($notification);
+        }, $data['device_tokens']);
+
+        try {
+            $messaging->send($messages);
+            return response()->json(['message' => 'Successfully sent message']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error sending message: ' . $e->getMessage()], 500);
+        }
     }
 
     public static function readAll($data)

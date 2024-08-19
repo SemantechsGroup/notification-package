@@ -14,7 +14,6 @@
         }
     ],
     "require": {
-        "pusher/pusher-php-server": "^7.2",
-        "smirltech/laravel-fcm": "^1.0"
+        "kreait/laravel-firebase": "^5.9"
     }
 }
