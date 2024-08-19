@@ -28,6 +28,18 @@ Place your firebase service account file in storage folder and add file name in 
 
 FIREBASE_CREDENTIALS=file_name.json
 
+BROADCAST_DRIVER=puhser
+
+PUSHER_APP_ID=
+
+PUSHER_APP_KEY=
+
+PUSHER_APP_SECRET=
+
+PUSHER_HOST=
+
+PUSHER_PORT=443
+
 Run following commands
 
 composer dump-autoload
