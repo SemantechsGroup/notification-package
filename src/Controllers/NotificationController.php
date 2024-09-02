@@ -81,13 +81,12 @@ class NotificationController extends Controller
 
         $notification = FcmNotification::create($data['body']['title'], $data['body']['detail']);
 
-        $messages = array_map(function ($token) use ($notification) {
-            return CloudMessage::withTarget('token', $token)
-                ->withNotification($notification);
-        }, $data['device_tokens']);
+        $notification = CloudMessage::fromArray([
+            'notification' => ["title" => $data['body']['title'], "body" => $data['body']['detail']]
+        ]);
 
         try {
-            $messaging->send($messages);
+            $messaging->sendMulticast($notification, $data['device_tokens']);
             return response()->json(['message' => 'Successfully sent message']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error sending message: ' . $e->getMessage()], 500);
