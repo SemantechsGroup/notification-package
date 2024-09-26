@@ -15,7 +15,7 @@ class NotificationController extends Controller
     public static function allNotifications()
     {
         try {
-            $notifications = Notification::latest()->get();
+            $notifications = Notification::with('sender.profilePic')->latest()->get();
             return $notifications;
         } catch (Exception $ex) {
             return response($ex->getMessage(), 500);
@@ -25,7 +25,7 @@ class NotificationController extends Controller
     public static function getAllNotifications($channel, $type, $userId)
     {
         try {
-            $notifications = Notification::where('channel', $channel)->where('type', $type)->latest()->get();
+            $notifications = Notification::with('sender.profilePic')->where('channel', $channel)->where('type', $type)->latest()->get();
             $newNotifications = [];
             $notificationCount = 0;
             foreach ($notifications as $notification) {
@@ -66,6 +66,23 @@ class NotificationController extends Controller
         }
     }
 
+    public static function readAll($data)
+    {
+        try {
+            foreach ($data as $notification) {
+                $not = Notification::find($notification['id']);
+                $not->fill(['is_read' => 1])->save();
+            }
+            return 'success';
+        } catch (Exception $ex) {
+            return response($ex->getMessage(), 500);
+        }
+    }
+
+
+    /*********** Private functions **********/
+
+    // Send web notifications
     private static function sendWebNotification($data)
     {
         foreach ($data['receiver_ids'] as $receiverId) {
@@ -73,6 +90,7 @@ class NotificationController extends Controller
         }
     }
 
+    // Send mobile notification via firebase
     private static function sendMobileNotification($data)
     {
         $firebase = (new Factory)->withServiceAccount(storage_path(env('FIREBASE_CREDENTIALS')));
@@ -91,18 +109,5 @@ class NotificationController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error sending message: ' . $e->getMessage()], 500);
         }
-    }
-
-    public static function readAll($data)
-    {
-        try {
-            foreach ($data as $notification) {
-                $not = Notification::find($notification['id']);
-                $not->fill(['is_read' => 1])->save();
-            }
-            return 'success';
-        } catch (Exception $ex) {
-            return response($ex->getMessage(), 500);
-        }
-    }
+    }  
 }
