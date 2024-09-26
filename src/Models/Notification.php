@@ -18,7 +18,9 @@ class Notification extends Model
         'to'
     ];
 
-    public function getCreatedAtAttribute()
+    protected $appends = ['sent_at'];
+
+    public function getSentAtAttribute()
     {
         $endDate = Carbon::createFromDate($this->created_at);
         return $endDate->diffForHumans();
